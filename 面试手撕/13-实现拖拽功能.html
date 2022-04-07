@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .show {
+            float: left;
+            width: 500px;
+            height: 600px;
+            border: 1px solid #ccc;
+        }
+
+        .show h1 {
+            text-align: center;
+        }
+        .patterns {
+            float: left;
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            margin-left: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .patterns img,
+        .empty img {
+            width: 200px;
+            height: 200px;
+            margin: 10px auto;
+            border: 1px solid #ccc;
+        }
+
+        .patterns img {
+            position: relative;
+        }
+
+        .tshirt {
+            position: relative;
+        }
+        .empty {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;  
+        }
+    </style>
+</head>
+<body>
+    <!-- 首先给元素添加draggable属性，这是html5新增的 -->
+    <section class="show">
+        <h1>拖动喜欢的图案到衣服上</h1>
+        <div class="tshirt">
+            <img src="./images/tshirt.jpeg" alt="tshirt">
+            <div class="empty"></div>
+        </div>
+    </section>
+
+    <section class="patterns">
+        <img draggable="true" src="./images/pic1.png" alt="boy">
+        <img draggable="true" src="./images/pic2.png" alt="dog">
+    </section>
+    <script>
+
+        const empty = document.querySelector('.empty')
+        const h1 = document.querySelector('h1')
+        let name;
+        document.addEventListener('dragstart', (e) => {
+            name = e.target.alt
+        }, false)
+
+        // 在拖动过程中显示边框
+        document.addEventListener('drag', (e) => {
+            e.target.style.border = '5px dashed red'
+            empty.style.border = '5px dashed yellow'
+        }, false)
+
+        document.addEventListener('dragend', (e) => {
+            e.target.style.border = '1px solid #ccc'
+            empty.style.border = 'none'
+            h1.innerHTML = '拖动喜欢的图案到衣服上'
+            h1.style.color = 'black'
+        }, false)
+
+        // 进入empty元素区域时
+        empty.addEventListener('dragenter', (e) => {
+            h1.innerHTML = name
+            h1.style.color = 'red'
+        }, false)
+
+        // 此时发现当我们拖拽的时候没有效果，是因为浏览器默认不能在拖拽以后进行放置
+        // 所以需要取消默认行为，一般要取消默认行为的是dragover和drop
+
+        empty.addEventListener('dragover', (e) => {
+            e.preventDefault()
+        })
+        empty.addEventListener('drop', (e) => {
+            // 如果空元素里已经有了子节点就去除掉
+            if(empty.firstChild) {
+                empty.removeChild(empty.firstChild)
+            }
+            let img = document.querySelector(`img[alt=${name}]`)
+            e.target.appendChild(img)
+        }, false)
+
+        // 利用鼠标事件
+        // const boy = document.querySelector('img[alt="boy"]')
+
+        // boy.addEventListener('mousedown', (e) => {
+        //     e.target.style.border = '5px dashed red'
+        // })
+        // document.addEventListener('mousemove', (e) => {
+        //     console.log(e.target);
+        // })
+
+        // boy.addEventListener('mouseup', (e) => {
+        //     e.target.style.border = '1px solid #ccc'
+        // })
+    </script>
+</body>
+</html>

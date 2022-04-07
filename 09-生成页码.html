@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset=utf-8>
+    </head>
+    <body>
+    	<ul id="ul">
+            
+        </ul>
+        <script type="text/javascript">
+            const _createPage = (allItem, pageItem) => {
+                // 补全代码
+                let ul = document.querySelector('#ul')
+                let pages = Math.ceil(allItem / pageItem)
+                let num = 1
+                while(num <= pages) {
+                    let li = document.createElement('li')
+                    li.innerHTML = num
+                    ul.appendChild(li)
+                    num++
+                }
+            }
+            _createPage(13,2)
+        </script>
+    </body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 
+        现有一字符串仅由 '('，')'，'{'，'}'，'['，']'六种括号组成。
+        若字符串满足以下条件之一，则为无效字符串：
+        ①任一类型的左右括号数量不相等；
+        ②存在未按正确顺序（先左后右）闭合的括号。
+        输出括号的最大嵌套深度，若字符串无效则输出 0。
+        0≤字符串长度≤100000
+        输入描述:
+            一个只包括 '('，')'，'{'，'}'，'['，']'的字符串
+        输出描述:
+            一个整数，最大的括号深度
+        示例 2
+            输入
+                ([]{()})
+            输出
+                3 
+    -->
+    <script>
+        // JAVA
+
+        // private static final Map<String,String> map = new HashMap<String,String>(){
+        //     {
+        //         put(")","(");
+        //         put("}","{");
+        //         put("]","[");
+        //     }
+        // };
+        // public int maxDepth(String str) {
+        //     String[] arr = str.split("");
+        //     Stack<String> stack = new Stack<>();
+
+        //     int maxDepth = 0;
+        //     for (int i = 0; i < arr.length; i++) {
+        //         if(!stack.isEmpty() && stack.peek().equals(map.getOrDefault(arr[i], ""))) {
+        //             maxDepth = Math.max(maxDepth,stack.size());
+        //             stack.pop();
+        //             continue;
+        //         }
+        //         stack.push(arr[i]);
+        //     }
+        //     if(stack.isEmpty()) {
+        //         return maxDepth;
+        //     }
+        //     return 0;
+        // }
+
+        function f(str) {
+            let arr = str.split('');
+            let temp = 0;
+            let max = 0
+            for (let item of arr) {
+                switch (item) {
+                    case '(':
+                        max = Math.max(max, ++temp)
+                        break
+                    case '[':
+                        max = Math.max(max, ++temp)
+                        break
+                    case '{':
+                        max = Math.max(max, ++temp)
+                        break
+                    case ')':
+                        temp--
+                        break
+                    case ']':
+                        temp--
+                        break
+                    case '}':
+                        temp--
+                        break
+                }
+            }
+            if (temp === 0) {
+                return max;
+            }
+            return 0;
+        }
+        console.log(f('([]{()})'));
+    </script>
+
+
+
+</body>
+
+</html>

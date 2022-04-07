@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div{
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 100px auto 0;
+            background-color: red;
+        }
+        div span {
+            position: absolute;
+            top: 50%;
+            left: calc(50% - 100px);
+            width: 200px;
+            height: 50px;
+            text-align: center;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <span></span>
+    </div>
+    <script>
+        function getTimeRemaining() {
+            const now = +new Date(), timeRemaining = +new Date('2022-4-3 15:30') - now
+            if(timeRemaining< 0) return 0
+            let day = Math.floor(timeRemaining/1000/60/60%24)
+            let hour = Math.floor(timeRemaining/1000/60/60%60)
+            let minute = Math.floor(timeRemaining/1000/60%60)
+            let second = Math.floor(timeRemaining/1000%60)
+
+            
+            return `${day}天${hour}时${minute}分${second}秒`    
+        }
+
+        // 用setTimeout实现setInterval
+        function cal() {
+            // function timer() {
+            //     let text = getTimeRemaining()
+            //     let span = document.querySelector('span')
+            //     span.innerHTML = text
+            //     setTimeout(timer, 1000)
+            // }
+            let text = getTimeRemaining()
+                let span = document.querySelector('span')
+                span.innerHTML = text
+                setTimeout(cal, 1000)
+        }
+
+        cal()
+    </script>
+</body>
+</html>

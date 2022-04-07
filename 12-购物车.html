@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+        body,html{
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    color: #000000;
+}
+table{
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+thead{
+    background: #3d444c;
+    color: #ffffff;
+}
+td,th{
+    border: 1px solid #e1e1e1;
+    padding: 0;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+}
+    </style>
+    </head>
+    <body>
+        <table id="jsTrolley">
+            <thead><tr><th>名称</th><th>价格</th><th>操作</th></tr></thead>
+            <tbody>
+                <tr><td>产品1</td><td>10.00</td><td><a href="javascript:void(0);">删除</a></td></tr>
+                <tr><td>产品2</td><td>30.20</td><td><a href="javascript:void(0);">删除</a></td></tr>
+                <tr><td>产品3</td><td>20.50</td><td><a href="javascript:void(0);">删除</a></td></tr>
+            </tbody>
+            <tfoot><tr><th>总计</th><td colspan="2">60.70(3件商品)</td></tr></tfoot>
+        </table>
+
+
+        <script>
+        // HTML模块为一个简化版的购物车，tbody为商品列表，tfoot为统计信息，系统会随机在列表中生成一些初始商品信息
+        // 1、请完成add函数，在列表后面显示items商品信息。参数items为{name: String, price: Number}组成的数组
+        // 2、请完成bind函数，点击每一行的删除按钮(包括通过add增加的行)，从列表中删除对应行
+        // 3、请注意同步更新统计信息，价格保留小数点后两位
+        // 4、列表和统计信息格式请与HTML示例保持一致
+        // 5、不要直接手动修改HTML中的代码
+        // 6、不要使用第三方库
+        function add(items) {
+            let tbody = document.querySelector('#jsTrolley').querySelector('tbody')
+            let tfootTd = document.querySelector('tfoot').firstChild.children[1]
+            let sum = +tfootTd.innerText.split('(')[0] 
+            let newCount= +tfootTd.innerText.split('(')[1].replace(/[^\d]+/, '')
+            for (let item of items) {
+                let tr = document.createElement('tr')
+                tr.innerHTML = `<td>${item.name}</td><td>${item.price.toFixed(2)}</td><td><a href="javascript:void(0);">删除</a></td>`
+                tbody.appendChild(tr)
+                sum += item.price
+                newCount++
+            }
+            tfootTd.innerHTML = `${sum.toFixed(2)}(${newCount}件商品)`
+        }
+
+        // add([{name: '苹果', price: 25}])
+        function bind() {
+
+            let tbody = document.querySelector('#jsTrolley').querySelector('tbody')
+            
+            tbody.addEventListener('click', (event) => {
+                if(event.target.tagName === 'A') {
+                    tbody.removeChild(event.target.parentNode.parentNode)
+                    let trPrice = event.target.parentNode.previousSibling.innerText
+                    let tfootTd = document.querySelector('tfoot').firstChild.children[1]
+                    let sum = +tfootTd.innerText.split('(')[0] - trPrice
+                    let newCount= +tfootTd.innerText.split('(')[1].replace(/[^\d]+/, '') - 1
+                    tfootTd.innerHTML = `${sum.toFixed(2)}(${newCount}件商品)`
+                }
+            })  
+        }
+        bind()
+        
+        function fun() {     
+            clear();      
+            bind();     
+            var items = [{name: '1', price: 1}, {name: '2', price: 2}, {name: '3', price: 3}];     
+            // add(items);      
+            var tbody = document.getElementById('jsTrolley').getElementsByTagName('tbody')[0];     
+            tbody.getElementsByTagName('tr')[0].getElementsByTagName('a')[0].click();     
+            items.shift();     
+            result = checkSame(items);     
+            result = result && checkTotal();     
+            return result; 
+        }     
+            
+        function checkSame(items) {         
+            var table = document.getElementById('jsTrolley');         
+            var tbody = table.getElementsByTagName('tbody')[0];         
+            var tr = [].slice.call(tbody.getElementsByTagName('tr'), 0);         
+            var result = true;         
+            tr.forEach(function (tr, index) {            
+                 var td = [].slice.call(tr.getElementsByTagName('td'), 0);             
+                 result = result &&                 
+                 td[0].innerHTML.trim() === items[index].name &&                 
+                 td[1].innerHTML.trim() === items[index].price.toFixed(2) &&                 
+                 td[2].innerHTML.trim() === '<a href="javascript:void(0);">删除</a>';         
+            });         
+            return result;     
+        }      
+        function checkTotal() {         
+            var table = document.getElementById('jsTrolley');         
+            var tbody = table.getElementsByTagName('tbody')[0];         
+            var tfoot = table.getElementsByTagName('tfoot')[0];         
+            var tr = [].slice.call(tbody.getElementsByTagName('tr'), 0);         
+            var total = 0;         
+            tr.forEach(function (tr) {             
+                total += +(tr.getElementsByTagName('td')[1].innerHTML.trim());         
+            });         
+            var content = tfoot.getElementsByTagName('td')[0].innerHTML.trim();         
+            var result = content === total.toFixed(2) + '(' + tr.length + '件商品)';         
+            return result;     
+        }      
+        function clear() {         
+            document.body.innerHTML = '<table id="jsTrolley"><thead><tr><th>名称</th><th>价格</th><th>操作</th></tr></thead><tbody></tbody><tfoot><tr><th>总计</th><td colspan="2">0(0件商品)</td></tr></tfoot></table>'; 
+        }
+
+        // fun()
+
+    </script>
+    </body>
+</html>
